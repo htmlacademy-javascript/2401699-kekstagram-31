@@ -20,4 +20,4 @@ const getUniqueNumber = () => {
   };
 };
 
-export {getRandomInteger, getRandomArrayElement, getUniqueNumber, };
+export {getRandomInteger, getRandomArrayElement, getUniqueNumber};
