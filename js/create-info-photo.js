@@ -13,9 +13,9 @@ const NUMBER_OF_REPOSITIONS = 25;
 //обращ через квадр не только из-за массива но и потому что вычисляем
 
 //функц получен случайного эл массива
-const idPhoto = getUniqueNumber();
-const idComment = getUniqueNumber();
-const urlNumber = getUniqueNumber();
+const idPhoto = getUniqueNumber(1, 25);
+const idComment = getUniqueNumber(1, 1000);
+const urlNumber = getUniqueNumber(1, 25);
 
 //функция создания объекта
 const createPhoto = () => ({
@@ -27,7 +27,7 @@ const createPhoto = () => ({
 
 //функция создания объекта
 const createInfoPhoto = () => ({
-  id: idPhoto(),
+  id: idPhoto,
   url: `photos/${urlNumber()}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
   likes: getRandomInteger(15, 200),
