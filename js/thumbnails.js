@@ -15,7 +15,7 @@ similarPhoto.forEach((photo) => {
   const image = thumbnail.querySelector('.picture__img');
 
   //Адрес изображения url подставьте как атрибут src изображения.   //по qeury селектор дописать url scr ссылку
-  image.scr = photo.url;
+  image.src = photo.url;
   //Описание изображения description подставьте в атрибут alt изображения.
   image.alt = photo.description;
 
@@ -23,9 +23,10 @@ similarPhoto.forEach((photo) => {
   thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
   //Количество лайков likes выведите в блок .picture__likes.
   thumbnail.querySelector('.picture__likes').textContent = photo.likes;
+
+  //ретюн возврат функции выше
+  similarVariableLengthFragment.append(thumbnail);
 });
 
 //закомит результат в дом
-container.appendChild(similarVariableLengthFragment);
-
-export {similarPhoto, container};
+container.append(similarVariableLengthFragment);

@@ -13,8 +13,8 @@ const getRandomInteger = (a, b) => {
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 //функц созд уникального числа
-const getUniqueNumber = () => {
-  let number = 0;
+const getUniqueNumber = (min) => {
+  let number = min;
   return function () {
     return number++;
   };
