@@ -1,5 +1,5 @@
 import './functions.js';
-import {similarVariableLength} from './create-info-photo.js';
-import './thumbnails.js';
+import './render-photo.js';
+import { openPicture } from './render-photo.js';
 
-similarVariableLength();
+openPicture();
