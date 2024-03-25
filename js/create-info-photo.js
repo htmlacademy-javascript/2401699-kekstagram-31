@@ -29,7 +29,7 @@ const createPhoto = () => ({
 const createInfoPhoto = () => {
 
   const photo = {
-    id: idPhoto,
+    id: idPhoto(),
     url: `../photos/${urlNumber()}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
     likes: getRandomInteger(15, 200),

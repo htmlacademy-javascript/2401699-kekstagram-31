@@ -29,7 +29,8 @@ function closePhoto() {
 }
 //в open передали id
 const openPhoto = (pictureId) => {
-  const currentPhoto = similarPhoto.find((photo) => photo.id === Number(pictureId)); //нах объект соответствующий нашему айди find метом поиска которыйвозвр три или фалс емли не нашел андефаинд
+  const currentPhoto = similarPhoto.find((photo) => Number(photo.id) === Number(pictureId));// const currentPhoto = similarPhoto.find((photo) => photo.id === Number(pictureId)); //нах объект соответствующий нашему айди find метом поиска которыйвозвр три или фалс емли не нашел андефаинд
+
   const socialCommentsFragment = document.createDocumentFragment();//фрагмент участок где что-то пока что будет хранится под комментарий
 
   //ниже что куда всавляется(куда лайки/комментарии и т.д)
