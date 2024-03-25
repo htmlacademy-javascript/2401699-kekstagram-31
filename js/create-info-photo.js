@@ -25,14 +25,18 @@ const createPhoto = () => ({
   name: getUniqueNumber(NAMES),
 });
 
-//функция создания объекта
-const createInfoPhoto = () => ({
-  id: idPhoto,
-  url: `photos/${urlNumber()}.jpg`,
-  description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(15, 200),
-  comments: Array.from({length: getRandomInteger(0, 30)}, createPhoto),
-});
+//Создает публикацию функция создания объекта
+const createInfoPhoto = () => {
+
+  const photo = {
+    id: idPhoto,
+    url: `../photos/${urlNumber()}.jpg`,
+    description: getRandomArrayElement(DESCRIPTIONS),
+    likes: getRandomInteger(15, 200),
+    comments: Array.from({length: getRandomInteger(0, 30)}, createPhoto),
+  };
+  return photo;
+};
 
 //функ возвр столько скоько нам нужно в данном случае 25 раз (похожийвариант) исп встроенный обьект array он вкл в себя вспомог метод для работы с массива есть фром9принимает настройки массива длина например) фром созд масси в длиной в 25 а все функц будет создавать наш билдер createInfoPhoto
 const similarVariableLength = () => Array.from({length: NUMBER_OF_REPOSITIONS}, createInfoPhoto);

@@ -3,17 +3,18 @@ const checkLength = (charset = ' ', maxLength = 1) => charset.length <= maxLengt
 checkLength ();
 
 
-// const isPalindrome = (string) => {
+// функ палиндром туда-сюда читается
+const isPalindromeString = (string) => {
+  string = string.replaceAll(' ', '').toLowerCase();
 
-//   string = string.replaceAll(' ', '').toLowerCase();
+  let reversion = '';
 
-//   let reversed = '';
+  for (let i = string.length - 1; i >= 0; i--) {
+    reversion += string[i];
+  }
 
-//   for(let i = string.length - 1; i >= 0; i--) {
-//     reversed += string[i];
-//   }
+  return string === reversion;
+};
 
-//   return string === reversed;
-// };
-
-// isPalindrome ();
+//функция проверки
+isPalindromeString('Лёша на полке клопа нашёл '); // true
