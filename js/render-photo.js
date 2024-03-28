@@ -12,6 +12,7 @@ const onBigPictureCancelClick = () => { //доб обработчик нажат
   closePhoto();
 };
 
+//проверка что клавиша эскейп
 const onEscKeydown = (evt) => {
   //если мы нажали escape только в это случае делаем closePhoto
   if (evt.key === 'Escape') {
@@ -60,4 +61,4 @@ function closePhoto () {
   clearComments();
 }
 
-export { openPicture };
+export { openPicture, onEscKeydown };
