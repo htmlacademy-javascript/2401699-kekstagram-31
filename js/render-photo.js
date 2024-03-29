@@ -12,7 +12,8 @@ const onBigPictureCancelClick = () => { //доб обработчик нажат
   closePhoto();
 };
 
-const onEscKeydown = (evt) => {
+//проверка что клавиша эскейп
+const isEscKeydown = (evt) => {
   //если мы нажали escape только в это случае делаем closePhoto
   if (evt.key === 'Escape') {
     closePhoto();
@@ -54,10 +55,10 @@ function closePhoto () {
   bigPictureSection.classList.add('hidden');
   document.body.classList.remove('modal-open'); //доб класс в ()
   userModalCanselElement.removeEventListener('click', onBigPictureCancelClick);
-  document.removeEventListener('keydown', onEscKeydown);
+  document.removeEventListener('keydown', isEscKeydown);
 
   //при закр старой фото очищаем все лишнее комментарии тд
   clearComments();
 }
 
-export { openPicture };
+export { openPicture, isEscKeydown };
