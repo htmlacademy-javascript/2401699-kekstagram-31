@@ -1,4 +1,4 @@
-import { onEscKeydown } from './render-photo';
+import { isEscKeydown } from './render-photo';
 import { isHashtagValid, error } from './valid-hashtag';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -16,10 +16,11 @@ const onPhotoCancelBtnClick = () => {
 
 const onDocumentKeydown = (evt) => {
   //пров что именно эскейп
-  if(onEscKeydown(evt)) {
+  if(isEscKeydown(evt)) {
     evt.preventDefault();
     if(document.activeElement === hashtagInput || document.activeElement === commentInput) {
-      evt.stopFile();
+      //помогает предотвратить активацию событий на родительских элементах после того, как они сработали на дочернем элементе.
+      evt.stopPropagation();
       //сброс знач формы
     } else {
       //сбрасивыем знач форм
@@ -30,7 +31,7 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-//функционал закр мод окна
+//ф закр мод окна
 function closePhotoEditor () {
   //когда случ lj, хиден
   uploadOverlay.classList.add('hidden');
@@ -41,15 +42,14 @@ function closePhotoEditor () {
   uploadCancelBtn.addEventListener('click', onPhotoCancelBtnClick);
   uploadFile.value = '';
 }
-// 1 Загрузка нового изображения:
 
 // выбор файла с изображением для загрузки;
 export const initUploadModal = () => {
-  //доб прослуш соб ченч-(изм соб инпута)
+  //доб просл соб change-(изм соб инпута)
   uploadFile.addEventListener('change', () => {
-    //когда случается уд хиден
+    //когда случается уд hidden
     uploadOverlay.classList.remove('hidden');
-    //веш на боди класс
+    //веш на body класс
     bodyPage.classList.add('modal-open');
     //кнопка на ней соб
     uploadCancelBtn.addEventListener('click', onPhotoCancelBtnClick);
@@ -60,17 +60,30 @@ export const initUploadModal = () => {
 //валидпция хэштегов
 const pristine = new Pristine(uploadForm,{
   classTo: 'img-upload__field-wrapper', // Эл д/добавления классов
-  errorClass: 'img-upload__field-wrapper--error', //класс д/эл с ошибкой
-  // successClass: 'img-upload__field-wrapper--success',
+  errorTextClass: 'img-upload__field-wrapper--error', //класс д/эл с ошибкой
   errorTextParent: 'img-upload__field-wrapper', //куда выодится текст с ошибкой
   errorTextTag: 'div', //обрамляет текст с ошибкой
 });
 
 //кол-во симв коменнтария не должен превышать 140
 pristine.addValidator(commentInput, (value) => {
-  const hasNumber = value.length <= 140;
-  return hasNumber;
+  //(текущая длина)
+  const isCorrectLength = value.length <= 140;
+  return isCorrectLength;
 }, 'Длина комментария не может превышать 140 символов.');
+
+//Добавляем слушатель на форму, при неправильно введённых значениях в форму, отправить невозможно
+//в форму передаём ('событие', функцию)
+uploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  //усл- Если "форма валидна", то выполни следующие действие
+  if(pristine.validate()) {
+    //У хештега убери пробелы по краям и множественные пробелы замени на одиночный и отправь форму
+    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, '');
+    // М form.submit() позволяет инициировать отправку формы из JavaScript
+    uploadForm.submit();
+  }
+});
 
 //доб валидатор, кладем (инпут функцию и смс об ошибке)
 pristine.addValidator(hashtagInput, isHashtagValid, error);
