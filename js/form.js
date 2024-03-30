@@ -1,13 +1,23 @@
 import { isEscKeydown } from './render-photo';
 import { isHashtagValid, error } from './valid-hashtag';
+import { onEffectChange } from './effects-slider';
+
+const SCALE_STEP = 0.25;
 
 const uploadForm = document.querySelector('.img-upload__form');
+const img = document.querySelector('.img-upload__preview img');//стили css картинки внутри
 const bodyPage = document.querySelector('body');
 const uploadFile = document.querySelector('#upload-file'); //id
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancelBtn = document.querySelector('#upload-cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+const imgUploadEffects = uploadForm.querySelector('.img-upload__effects');
+
+
+const smallerElement = document.querySelector ('.scale__control--smaller'); //минус
+const biggerElement = document.querySelector ('.scale__control--bigger'); //плюс
+const controlValueElement = document.querySelector ('.scale__control--value'); //знач поля
 
 //выз колбэк closePhotoEditor- делает обратное доб все удаляет
 const onPhotoCancelBtnClick = () => {
@@ -85,5 +95,36 @@ uploadForm.addEventListener('submit', (evt) => {
   }
 });
 
+// const scaleReset = () => {
+//   img.style.transform = '';
+// };
+
+let scale = 1;
+
+//кн уменьшение размера
+const onSmalleClick = () => {
+  if (scale > SCALE_STEP) {
+    //умен размер
+    scale -= SCALE_STEP;
+    //записы ументше размер в style.transform, через знач scale
+    img.style.transform = `scale(${scale})`;
+    //изм % в окне
+    controlValueElement.value = `${scale * 100}%)`;
+  }
+};
+
+//кн увеличение размера
+const onBiggerClick = () => {
+  if (scale < 1) {
+    scale += SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    controlValueElement.value = `${scale * 100}%)`;
+  }
+};
+
 //доб валидатор, кладем (инпут функцию и смс об ошибке)
 pristine.addValidator(hashtagInput, isHashtagValid, error);
+smallerElement.addEventListener('click', onSmalleClick);
+biggerElement.addEventListener('click', onBiggerClick);
+imgUploadEffects.addEventListener('change', onEffectChange);
+
