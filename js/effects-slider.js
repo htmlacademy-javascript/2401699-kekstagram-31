@@ -107,5 +107,4 @@ const onEffectChange = (evt) => {
       });
   }
 };
-console.log(onEffectChange);
 export { onEffectChange };
