@@ -10,52 +10,41 @@ const commentsCountShow = bigPictureSection.querySelector('.social__comment-show
 
 socialComments.innerHTML = '';
 
-//
 const renderNextComments = () => {
-  //прох по списку renderedComments = берем глоб перем comments (слайс нарез от одного эл до какого-то)
-  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);
-  //=вытаскиваем длину массива плюс ск комментариев
-  const renderedCommentsLength = renderedComments.length + currentCount;
 
-  //отрисовка фотографий проходимся по комментариям через .forEach
-  renderedComments.forEach((comment) => {
+  const renderedComments = comments.slice(currentCount, currentCount + COUNT_STEP);//прох по списку renderedComments = берем глоб перем comments (слайс нарез от одного эл до какого-то)
+  const renderedCommentsLength = renderedComments.length + currentCount;//=вытаскиваем длину массива плюс ск комментариев
+
+  renderedComments.forEach((comment) => {//отрисовка фотографий проходимся по комментариям через .forEach
     const socialCommentNode = socialComment.cloneNode(true); //соз перемен заполняем ее 3эл ниже обяз через клонирование сложная ссылка
-
     const authorOfComment = socialCommentNode.querySelector('.social__picture');
 
     authorOfComment.src = comment.avatar;
     authorOfComment.alt = comment.name;
     socialCommentNode.querySelector('.social__text').textContent = comment.message;
-
     socialComments.append(socialCommentNode);//lj, ahfuvtyn
   });
 
   commentsCountShow.textContent = renderedCommentsLength;
-  //если знач комментариев   >= общего кол-ва длины коменнтариев
-  if (renderedCommentsLength >= comments.length) {
-    //тогда удаляем кнопку загрузить
-    newCommentsLoader.classList.add('hidden');
+
+  if (renderedCommentsLength >= comments.length) {//если знач комментариев   >= общего кол-ва длины коменнтариев
+    newCommentsLoader.classList.add('hidden');//тогда удаляем кнопку загрузить
   }
-  //записыв то на ск увел было 0 потом 5 и тд
-  currentCount += COUNT_STEP;
+  currentCount += COUNT_STEP;//записыв то на ск увел было 0 потом 5 и тд
 };
 
-//при закр старой фото очищаем все лишнее комментарии тд
-const clearComments = () => {
+const clearComments = () => {//при закр старой фото очищаем все лишнее комментарии тд
   currentCount = 0;
   socialComments.innerHTML = '';
   newCommentsLoader.classList.remove('hidden');
   newCommentsLoader.removeEventListener('click', renderNextComments);
 };
 
-//в renderComments передается массив(currentPhotoComments) комментариев
-const renderComments = (currentPhotoComments) => {
-  //глобальный массив присваиваем ему то что пришло из рендер коментс
-  comments = currentPhotoComments;
+const renderComments = (currentPhotoComments) => {//в renderComments передается массив(currentPhotoComments) комментариев
+  comments = currentPhotoComments; //глобальный массив присваиваем ему то что пришло из рендер коментс
   renderNextComments();
 
-  //доб обработчик по клику (внизу загурзить еще) рендернехткомментс функ вызова фото
-  newCommentsLoader.addEventListener('click', renderNextComments);
+  newCommentsLoader.addEventListener('click', renderNextComments);//доб обработчик по клику (внизу загурзить еще) рендернехткомментс функ вызова фото
 };
 
 export { clearComments, renderComments };

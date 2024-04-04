@@ -4,18 +4,23 @@ import './render-comments.js';
 import { openPicture } from './render-photo.js';
 import { initUploadModal } from './form.js';
 import './valid-hashtag.js';
-// import { similarPhoto } from './thumbnails.js';
-// import { getData } from './api.js';
+import { renderThumbnails } from './thumbnails.js';
+import { savePhoto, copyPhotosArray } from './photo-state.js';
+import { getData } from './api.js';
+import { showErrorMessage } from './error.js';
 
-// const dataError = document.querySelector('#data-error').content.querySelector('.data-error');
+const bootstrap = async () => {//доб обр ошибки
+  try {//блок исключение если нет сети
+    const photos = await getData();
+    savePhoto(photos);
+    copyPhotosArray(photos);
+    renderThumbnails(photos);
+  } catch(error) {
+    showErrorMessage(error.message);
+  }
 
-// getData()
-//   .then((photos) => {
-//     similarPhoto(photos);
-//   }).catch(() => {
-//     document.body.append(dataError);
-//     setTimeout(() => document.body.removeChild(dataError), 5000);
-//   });
+};
 
 openPicture();
 initUploadModal();
+bootstrap();
