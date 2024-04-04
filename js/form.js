@@ -1,6 +1,9 @@
 import { isEscKeydown } from './render-photo';
 import { isHashtagValid, error } from './valid-hashtag';
 import { onEffectChange } from './effects-slider';
+import { sendData } from './api';
+import { appendNotification } from './notification-module';
+
 
 const SCALE_STEP = 0.25;
 
@@ -19,39 +22,63 @@ const smallerElement = document.querySelector ('.scale__control--smaller'); //м
 const biggerElement = document.querySelector ('.scale__control--bigger'); //плюс
 const controlValueElement = document.querySelector ('.scale__control--value'); //знач поля
 
+
+//для разблокировки и блокировки кнопки методы
+const formSubmitButton = document.querySelector('.img-upload__submit');
+
+//2 шаблона
+const templateSuccess = document.querySelector('#success').content;
+const templateError = document.querySelector('#error').content;
+
+const submitButtonText = {
+  IDLE: 'Сохранить',//когда ничего не происходит
+  SENDING: 'Сохраняю...'//что при отправке
+};
+
+const disabledButton = (text) => {
+  formSubmitButton.disabled = true;
+  formSubmitButton.textContent = text;
+};
+
+const enableButton = (text) => {
+  formSubmitButton.disabled = false;
+  formSubmitButton.textContent = text;
+};
+
+
 //выз колбэк closePhotoEditor- делает обратное доб все удаляет
 const onPhotoCancelBtnClick = () => {
   closePhotoEditor();
 };
 
 const onDocumentKeydown = (evt) => {
-  //пров что именно эскейп
-  if(isEscKeydown(evt)) {
+  if(isEscKeydown(evt)) { //пров что именно эскейп
     evt.preventDefault();
+    // closeEditionForm(form);
     if(document.activeElement === hashtagInput || document.activeElement === commentInput) {
-      //помогает предотвратить активацию событий на родительских элементах после того, как они сработали на дочернем элементе.
-      evt.stopPropagation();
-      //сброс знач формы
+      evt.stopPropagation(); //помогает предотвратить активацию событий на родительских элементах после того, как они сработали на дочернем элементе.
     } else {
-      //сбрасивыем знач форм
-      uploadForm.reset();
-      //вызываем то что до ()
-      closePhotoEditor();
+      uploadForm.reset();//сброс знач формы
+      closePhotoEditor(); //вызываем то что до ()
     }
   }
 };
 
 //ф закр мод окна
 function closePhotoEditor () {
-  //когда случ lj, хиден
-  uploadOverlay.classList.add('hidden');
-  //веш на боди класс
-  bodyPage.classList.remove('modal-open');
+  uploadOverlay.classList.add('hidden'); //когда случ lj, хиден
+  bodyPage.classList.remove('modal-open'); //веш на боди класс
   document.addEventListener('keydown', onDocumentKeydown);
-  //кнопка на ней соб
-  uploadCancelBtn.addEventListener('click', onPhotoCancelBtnClick);
+  uploadCancelBtn.addEventListener('click', onPhotoCancelBtnClick); //кнопка на ней соб
   uploadFile.value = '';
 }
+
+// const closedEditingForm = (formElement) => {
+//   resetValidation();//сброс
+//   resetScale();
+//   resetSlider();
+//   formElement.reset();//очищаем форму
+// };
 
 // выбор файла с изображением для загрузки;
 export const initUploadModal = () => {
@@ -82,18 +109,51 @@ pristine.addValidator(commentInput, (value) => {
   return isCorrectLength;
 }, 'Длина комментария не может превышать 140 символов.');
 
-//Добавляем слушатель на форму, при неправильно введённых значениях в форму, отправить невозможно
-//в форму передаём ('событие', функцию)
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  //усл- Если "форма валидна", то выполни следующие действие
-  if(pristine.validate()) {
-    //У хештега убери пробелы по краям и множественные пробелы замени на одиночный и отправь форму
-    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, '');
-    // М form.submit() позволяет инициировать отправку формы из JavaScript
-    uploadForm.submit();
+//Добавляем отправку формы
+const sendFormData = async (formElement) => {//в форму передаём ('событие', функцию)
+  const isValid = pristine.validate();//провер валидность с помощью pristine
+  if(isValid) { //усл- Если "форма валидна", то выполни следующие действие
+    disabledButton(submitButtonText.SENDING);//блок кнопку и пишем идет отправка
+
+    try {
+      await sendData(new FormData(formElement));//если не выд ошибку вызов ф и появл мод окно
+      appendNotification(templateSuccess); //(перед шаблон и ф необяз(триггер) что можно сделать помимо откр мод окна)
+    } catch(err) {
+      appendNotification(templateError);//шаблон ошибки
+    } finally {//это всегда исп несмотря на то что мб выше
+      enableButton(submitButtonText.IDLE);//уст текст кнопки
+    }
+    // closePhotoEditor();
   }
-});
+};
+
+const formSubmitHandler = (evt) => {
+  evt.preventDefault();
+  sendFormData(evt.target);
+};
+
+let scale = 1;
+
+//кн уменьшение размера
+const onSmalleClick = () => {
+  if (scale > SCALE_STEP) {
+    //умен размер
+    scale -= SCALE_STEP;
+    //записы ументше размер в style.transform, через знач scale
+    img.style.transform = `scale(${scale})`;
+    //изм % в окне
+    controlValueElement.value = `${scale * 100}%)`;
+  }
+};
+
+//кн увеличение размера
+const onBiggerClick = () => {
+  if (scale < 1) {
+    scale += SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    controlValueElement.value = `${scale * 100}%)`;
+  }
+};
 
 // const scaleReset = () => {
 //   img.style.transform = '';
@@ -127,4 +187,6 @@ pristine.addValidator(hashtagInput, isHashtagValid, error);
 smallerElement.addEventListener('click', onSmalleClick);
 biggerElement.addEventListener('click', onBiggerClick);
 imgUploadEffects.addEventListener('change', onEffectChange);
+
+uploadForm.addEventListener('submit', formSubmitHandler);
 
