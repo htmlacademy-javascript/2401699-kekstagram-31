@@ -4,6 +4,7 @@ import { onEffectChange } from './effects-slider';
 import { sendData } from './api';
 import { appendNotification } from './notification-module';
 
+
 const SCALE_STEP = 0.25;
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -20,6 +21,7 @@ const imgUploadEffects = uploadForm.querySelector('.img-upload__effects');
 const smallerElement = document.querySelector ('.scale__control--smaller'); //минус
 const biggerElement = document.querySelector ('.scale__control--bigger'); //плюс
 const controlValueElement = document.querySelector ('.scale__control--value'); //знач поля
+
 
 //для разблокировки и блокировки кнопки методы
 const formSubmitButton = document.querySelector('.img-upload__submit');
@@ -153,9 +155,38 @@ const onBiggerClick = () => {
   }
 };
 
+// const scaleReset = () => {
+//   img.style.transform = '';
+// };
+
+let scale = 1;
+
+//кн уменьшение размера
+const onSmalleClick = () => {
+  if (scale > SCALE_STEP) {
+    //умен размер
+    scale -= SCALE_STEP;
+    //записы ументше размер в style.transform, через знач scale
+    img.style.transform = `scale(${scale})`;
+    //изм % в окне
+    controlValueElement.value = `${scale * 100}%)`;
+  }
+};
+
+//кн увеличение размера
+const onBiggerClick = () => {
+  if (scale < 1) {
+    scale += SCALE_STEP;
+    img.style.transform = `scale(${scale})`;
+    controlValueElement.value = `${scale * 100}%)`;
+  }
+};
+
 //доб валидатор, кладем (инпут функцию и смс об ошибке)
 pristine.addValidator(hashtagInput, isHashtagValid, error);
 smallerElement.addEventListener('click', onSmalleClick);
 biggerElement.addEventListener('click', onBiggerClick);
 imgUploadEffects.addEventListener('change', onEffectChange);
+
 uploadForm.addEventListener('submit', formSubmitHandler);
+
