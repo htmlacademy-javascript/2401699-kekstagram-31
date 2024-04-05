@@ -1,26 +1,19 @@
-import './functions.js';
-import './render-photo.js';
-import './render-comments.js';
-import { openPicture } from './render-photo.js';
-import { initUploadModal } from './form.js';
-import './valid-hashtag.js';
+import { openPicture } from './modal-photo.js';
+import { initUploadModal, closePhotoEditor } from './upload-form.js';
 import { renderThumbnails } from './thumbnails.js';
-import { savePhoto, copyPhotosArray } from './photo-state.js';
 import { getData } from './api.js';
-import { showErrorMessage } from './error.js';
+import { showErrorMessage } from './notification-module.js';
+import { configFilter } from './image-filters.js';
+import { sendFormData } from './upload-form.js';
 
-const bootstrap = async () => {//доб обр ошибки
-  try {//блок исключение если нет сети
-    const photos = await getData();
-    savePhoto(photos);
-    copyPhotosArray(photos);
-    renderThumbnails(photos);
-  } catch(error) {
-    showErrorMessage(error.message);
-  }
-
-};
+//добавляем обработчик
+getData().then((photos) => {
+  renderThumbnails(photos);
+  configFilter(photos);
+}).catch((error) => {
+  showErrorMessage(error.message);
+});
 
 openPicture();
 initUploadModal();
-bootstrap();
+sendFormData(closePhotoEditor);
