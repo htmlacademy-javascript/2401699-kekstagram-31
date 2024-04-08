@@ -9,8 +9,7 @@ const likesCount = bigPictureSection.querySelector('.likes-count'); //Колич
 const socialCaption = bigPictureSection.querySelector('.social__caption'); //блок с опис комментариев
 const userModalCanselElement = bigPictureSection.querySelector('.big-picture__cancel');
 
-const onBigPictureCancelClick = (evt) => { //доб обработчик нажатия на фото
-  evt.preventDefault();
+const onBigPictureCancelClick = () => { //доб обработчик нажатия на фото
   closePhoto();
 };
 

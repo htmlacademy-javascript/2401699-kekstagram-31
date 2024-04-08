@@ -1,4 +1,4 @@
-import { onBigPictureCancelClick } from './modal-photo';
+import { renderThumbnails } from './thumbnails';
 import { debounce } from './util';
 
 const FILTER = {
@@ -16,12 +16,12 @@ const MAX_PICTURE_COUNT = 10;
 
 let pictures = [];
 let defaultFilter = FILTER.default;
-const filterElement = document.querySelector('img-filters');
-const debounceRender = debounce(onBigPictureCancelClick);
+const filterElement = document.querySelector('.img-filters');
+const debounceRender = debounce(renderThumbnails);
 
 function onFilterChange(evt) {
   const targetButton = evt.target;//кн на которую нажали
-  const activeButton = document.querySelector('img-filters__button--active');
+  const activeButton = document.querySelector('.img-filters__button--active');
   if (!targetButton.matches('button')) { //проверка что точно по клику попали на кнопку
     return;
   } if (activeButton === targetButton) { //сравнение активности и нажатия кнопки

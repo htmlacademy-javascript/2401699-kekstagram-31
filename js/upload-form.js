@@ -6,7 +6,7 @@ import { submitBtnText, disabledBtn, enableBtn, handleSuccessMessage, handleErro
 import { addScalesListeners, removeScalesListeners } from './scale-step.js';
 import { showErrorMessage } from './notification-module.js';
 
-const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif', '.jfif'];
+const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif', '.jfif', '.svg'];
 
 // const fileChooser = document.querySelector('.img-upload__start input[type=file]');
 const uploadForm = document.querySelector('.img-upload__form');
@@ -19,7 +19,7 @@ const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 const imgUploadEffects = uploadForm.querySelector('.img-upload__effects');
 const imgUploadPreview = uploadForm.querySelector('.img-upload__preview img');
-const uploadPreview = uploadForm.querySelectorAll('.effects__preview');
+const uploadEffectPreview = uploadForm.querySelectorAll('.effects__preview');
 
 const onPhotoCancelBtnClick = () => {//выз колбэк closePhotoEditor- делает обратное доб все удаляет
   closePhotoEditor();
@@ -57,7 +57,7 @@ function closePhotoEditor () {
   uploadCancelBtn.addEventListener('click', onPhotoCancelBtnClick); //кнопка на ней событие
   uploadFile.value = '';
   if (closePhotoEditor) {
-    uploadPreview.style.transform = 'none';
+    imgUploadPreview.style.transform = 'none';
     removeScalesListeners();
   } else if (initUploadModal()) {
     addScalesListeners();
@@ -74,7 +74,7 @@ const onFileInputChange = () => {
     if (matches) {
       const url = URL.createObjectURL(file);
       imgUploadPreview.src = url;
-      uploadPreview.forEach((item) => {
+      uploadEffectPreview.forEach((item) => {
         item.style.backgroundImage = `url(${url})`;
       });
     } else {

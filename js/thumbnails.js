@@ -1,10 +1,17 @@
 const container = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content.querySelector('.picture');
 
+const clearThumbnails = () => {
+  const pictureElements = document.querySelectorAll('.picture');
+
+  pictureElements.forEach((el) => el.remove());
+};
+
 let photosList;
 
 //cоздаем 1 фото
 const renderThumbnails = (photos) => {
+  clearThumbnails();
   const similarVariableLengthFragment = document.createDocumentFragment(); //интернирование метод хранения лишь одной копии из многих одинаковых объектов.
   photosList = photos;
   photos.forEach(({url, id, comments, likes}) => {
