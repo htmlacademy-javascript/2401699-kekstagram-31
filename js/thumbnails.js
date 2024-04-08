@@ -1,8 +1,5 @@
-import {similarVariableLength} from './create-info-photo.js';
-
 const container = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content.querySelector('.picture');
-const similarPhoto = similarVariableLength();
 
 let photosList;
 
@@ -10,7 +7,7 @@ let photosList;
 const renderThumbnails = (photos) => {
   const similarVariableLengthFragment = document.createDocumentFragment(); //интернирование метод хранения лишь одной копии из многих одинаковых объектов.
   photosList = photos;
-  similarPhoto.forEach(({url, id, comments, likes}) => {
+  photos.forEach(({url, id, comments, likes}) => {
     const thumbnail = template.cloneNode(true);
     thumbnail.querySelector('.picture__img').src = url; //Адрес изображения url подставьте как атрибут src изображения.   //по qeury селектор дописать url scr ссылку
     thumbnail.dataset.pictureId = id; //чтобы программа понимала что именно по нужному фото кликаем доб id (dataset.pictureId жту чать просто запомнить синстаксис )
@@ -23,4 +20,4 @@ const renderThumbnails = (photos) => {
 
 };
 
-export { container, template, renderThumbnails, photosList };
+export { renderThumbnails, photosList };

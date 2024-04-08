@@ -7,6 +7,7 @@ const socialComments = bigPictureSection.querySelector('.social__comments'); //�
 const socialComment = bigPictureSection.querySelector('.social__comment');
 const newCommentsLoader = bigPictureSection.querySelector('.comments-loader');
 const commentsCountShow = bigPictureSection.querySelector('.social__comment-shown-count');
+const countTotalComments = bigPictureSection.querySelector('.social__comment-total-count');//125
 
 socialComments.innerHTML = '';
 
@@ -23,9 +24,11 @@ const renderNextComments = () => {
     authorOfComment.alt = comment.name;
     socialCommentNode.querySelector('.social__text').textContent = comment.message;
     socialComments.append(socialCommentNode);//до фрагмент
+
+    commentsCountShow.textContent = renderedCommentsLength;
   });
 
-  commentsCountShow.textContent = renderedCommentsLength;
+  countTotalComments.textContent = comments.length;
 
   if (renderedCommentsLength >= comments.length) {//если значение комментариев >= общего кол-ва длины коменнтариев
     newCommentsLoader.classList.add('hidden');//тогда удаляем кнопку загрузить

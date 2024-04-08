@@ -4,9 +4,11 @@ import { onEffectChange } from './effects-slider.js';
 import { sendData } from './api.js';
 import { submitBtnText, disabledBtn, enableBtn, handleSuccessMessage, handleErrorMessage, messageOfSuccess, messageOfError } from './notification-module.js';
 import { addScalesListeners, removeScalesListeners } from './scale-step.js';
+import { showErrorMessage } from './notification-module.js';
 
 const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif', '.jfif'];
 
+// const fileChooser = document.querySelector('.img-upload__start input[type=file]');
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadInput = document.querySelector('.img-upload__input');
 const bodyPage = document.querySelector('body');
@@ -42,6 +44,8 @@ export function initUploadModal () {
     bodyPage.classList.add('modal-open');
     uploadCancelBtn.addEventListener('click', onPhotoCancelBtnClick);
     document.addEventListener('keydown', onDocumentKeydown);
+    addScalesListeners();
+
   });
 }
 
@@ -61,37 +65,25 @@ function closePhotoEditor () {
 }
 
 //загрузка только изображения
-function onFileInputChange() {
-  const file = uploadInput.files[0];
-  const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));//через массив разрешенных разрешений
-  if (matches) {
-    const url = URL.createObjectURL(file);
-    imgUploadPreview.src = url;
-    imgUploadEffects.forEach((item) => {
-      item.style.backgroundImage = `url(${url})`;
-    });
-  } else {
-    return;
-  }
+const onFileInputChange = () => {
+  uploadInput.addEventListener('change', () => {
+    const file = uploadInput.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((item) => fileName.endsWith(item));//через массив разрешенных разрешений
 
-  initUploadModal();
-}
-// const isValidType = (file) => {
-//   const fileName = file.name.toLowerCase();
-//   return FILE_TYPES.some((it) => fileName.endsWith(it));
-// };
-// const onFileInputChange = () => {
-//   const file = uploadInput.files[0];
-
-//   if (file && isValidType(file)) {
-//     imgUploadPreview.src = URL.createObjectURL(file);
-//     imgUploadEffects.forEach((preview) => {
-//       preview.style.backgroundImage = `url('${imgUploadPreview.src}')`;
-//     });
-//   }
-//   initUploadModal();
-// };
+    if (matches) {
+      const url = URL.createObjectURL(file);
+      imgUploadPreview.src = url;
+      uploadPreview.forEach((item) => {
+        item.style.backgroundImage = `url(${url})`;
+      });
+    } else {
+      showErrorMessage('Неверный тип файла');
+      return;
+    }
+    initUploadModal();
+  });
+};
 
 //валидация хэштегов
 const pristine = new Pristine(uploadForm,{
@@ -140,6 +132,5 @@ const formSubmitHandler = (evt) => {
 pristine.addValidator(hashtagInput, isHashtagValid, error);
 imgUploadEffects.addEventListener('change', onEffectChange);
 uploadForm.addEventListener('submit', formSubmitHandler);
-uploadInput.addEventListener('change', onFileInputChange);
 
-export { sendFormData, closePhotoEditor };
+export { sendFormData, closePhotoEditor, onFileInputChange };

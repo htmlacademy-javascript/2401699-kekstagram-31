@@ -5,6 +5,7 @@ import { getData } from './api.js';
 import { showErrorMessage } from './notification-module.js';
 import { configFilter } from './image-filters.js';
 import { sendFormData } from './upload-form.js';
+import { onFileInputChange } from './upload-form.js';
 
 //добавляем обработчик
 getData().then((photos) => {
@@ -17,3 +18,4 @@ getData().then((photos) => {
 openPicture();
 initUploadModal();
 sendFormData(closePhotoEditor);
+onFileInputChange();
