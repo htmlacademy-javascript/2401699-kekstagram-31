@@ -20,14 +20,13 @@ noUiSlider.create(sliderElement, {
   },
 });
 
-//обновляем input вызов при изм положении слайдера on-м (слуш соб)
-sliderElement.noUiSlider.on('update', () => {
-  //если из то изм знач в поле ввода(value запис в св-во)
+sliderElement.noUiSlider.on('update', () => {//обновляем input вызов при измененном положении слайдера on-м (слушатель событий)
   valueEffect.value = sliderElement.noUiSlider.get();
 });
 
 levelEffectUpload.classList.add('hidden');
 
+//эффекты фото
 const onEffectChange = (evt) => {
   const effect = evt.target.value;
 

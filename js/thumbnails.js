@@ -1,34 +1,30 @@
-import {similarVariableLength} from './create-info-photo.js';
-//ищем tempate и через content.querySelector нах нужное нам содержимое
-
-//сначала 1 фото сделаем
 const container = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content.querySelector('.picture');
 
-const similarPhoto = similarVariableLength();
+const clearThumbnails = () => {
+  const pictureElements = document.querySelectorAll('.picture');
 
-const renderThumbnails = () => {
-  //интернирование метод хранения лишь одной копии из многих одинаковых объектов.
-  const similarVariableLengthFragment = document.createDocumentFragment();
-
-  similarPhoto.forEach(({url, id, comments, likes}) => {
-    const thumbnail = template.cloneNode(true);
-
-    //Адрес изображения url подставьте как атрибут src изображения.   //по qeury селектор дописать url scr ссылку
-    thumbnail.querySelector('.picture__img').src = url;
-    //чтобы программа понимала что именно по нужному фото кликаем доб id (dataset.pictureId жту чать просто запомнить синстаксис )
-    thumbnail.dataset.pictureId = id;
-    //Количество комментариев comments выведите в блок .picture__comments.
-    thumbnail.querySelector('.picture__comments').textContent = comments.length;
-    //Количество лайков likes выведите в блок .picture__likes.
-    thumbnail.querySelector('.picture__likes').textContent = likes;
-
-    //ретюн возврат функции выше
-    similarVariableLengthFragment.append(thumbnail);
-  });
-
-  //закомит результат в дом
-  container.append(similarVariableLengthFragment);
+  pictureElements.forEach((el) => el.remove());
 };
 
-export { container, template, renderThumbnails, similarPhoto };
+let photosList;
+
+//cоздаем 1 фото
+const renderThumbnails = (photos) => {
+  clearThumbnails();
+  const similarVariableLengthFragment = document.createDocumentFragment(); //интернирование метод хранения лишь одной копии из многих одинаковых объектов.
+  photosList = photos;
+  photos.forEach(({url, id, comments, likes}) => {
+    const thumbnail = template.cloneNode(true);
+    thumbnail.querySelector('.picture__img').src = url; //Адрес изображения url подставьте как атрибут src изображения.   //по qeury селектор дописать url scr ссылку
+    thumbnail.dataset.pictureId = id; //чтобы программа понимала что именно по нужному фото кликаем доб id (dataset.pictureId жту чать просто запомнить синстаксис )
+    thumbnail.querySelector('.picture__comments').textContent = comments.length; //Количество комментариев comments выведите в блок .picture__comments.
+    thumbnail.querySelector('.picture__likes').textContent = likes; //Количество лайков likes выведите в блок .picture__likes.
+    similarVariableLengthFragment.append(thumbnail); //ретюн возврат функции выше
+
+  });
+  container.append(similarVariableLengthFragment); //закомит результат в дом
+
+};
+
+export { renderThumbnails, photosList };

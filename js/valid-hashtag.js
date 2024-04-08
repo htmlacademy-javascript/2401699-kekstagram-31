@@ -1,27 +1,21 @@
 const MAX_NUMBER_HASHTAG = 5;
 const MAX_NUMBER_SYMBOL = 20;
 
-//изменяемая переменная
 let textErrorMessage = '';
 
-//функц кот вернет textError
-const error = () => textErrorMessage;
-
+const error = () => textErrorMessage; //ф вернет textError
 
 const isHashtagValid = (value) => {
-  //обнуляем предыдушие ошибки
-  textErrorMessage = '';
+  textErrorMessage = ''; //обнуляем предыдушие ошибки
 
-  //берем знач переводим к нижнему регистру и обрезаем от пробелов по бокам(трим) мал и большая буквы- одинаковое
-  const inputText = value.toLowerCase().trim();
+  const inputText = value.toLowerCase().trim(); //берем знач переводим к нижнему регистру и обрезаем от пробелов по бокам(trim) мал и большая буквы- одинаковое
 
-  //проверка на обяз или необяз хештегов если нет верни тру
-  if (!inputText) {
+  if (!inputText) { //проверка на обяз или необяз хештегов если нет верни true
     return true;
   }
 
-  //разделяем строку на куски (\s) символ пробела тоже что и ('')
-  const inputArray = inputText.split(/\s+/);
+  const inputArray = inputText.split(/\s+/); //разделяем строку на куски (\s) символ пробела тоже что и ('')
+
 
   //получаем массив из хэштегов раздел массивами
   const rules = [
@@ -55,8 +49,7 @@ const isHashtagValid = (value) => {
     },
   ];
 
-  //вызыв у массива every который даст тру только если каждый эл массива соответсвует опр условия? ниже колбэк
-  return rules.every((rule) => {
+  return rules.every((rule) => { //вызыв у массива every который даст true только если каждый эл массива соответсвует опр условия? ниже колбэк
     const isInvalid = rule.check;
     if (isInvalid) {
       textErrorMessage = rule.error;
