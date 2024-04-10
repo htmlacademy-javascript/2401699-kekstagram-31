@@ -6,6 +6,10 @@ const controlValueElement = document.querySelector ('.scale__control--value'); /
 const SCALE_STEP = 0.25;
 let scale = 1;
 
+const resetScale = () => {
+  scale = 1;
+};
+
 //кн уменьшение размера
 const onSmalleClick = () => {
   if (scale > SCALE_STEP) {
@@ -34,4 +38,4 @@ function removeScalesListeners () {
   biggerElement.removeEventListener('click', onBiggerClick);
 }
 
-export { addScalesListeners, removeScalesListeners };
+export { addScalesListeners, removeScalesListeners, resetScale };
