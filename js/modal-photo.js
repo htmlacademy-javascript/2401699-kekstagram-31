@@ -14,7 +14,14 @@ const onBigPictureCancelClick = () => { //доб обработчик нажат
   closePhoto();
 };
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+<<< master
+const isEscKeydown = (evt) => {//проверка что клавиша ecs
+  if (evt.key === 'Escape') { //если мы нажали escape только в это случае делаем closePhoto
+    evt.preventDefault();
+    closePhoto();
+  }
+};
+=======
 
 const openBigPhoto = (pictureId) => {
   const currentPhoto = photosList.find((photo) => Number(photo.id) === Number(pictureId));
