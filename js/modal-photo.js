@@ -1,5 +1,6 @@
 import { photosList } from './thumbnails.js';
 import { clearComments, renderComments } from './render-comments.js';
+import { onDocumentKeydown } from './upload-form.js';
 
 const body = document.querySelector('body');
 const container = document.querySelector('.pictures');
@@ -13,11 +14,7 @@ const onBigPictureCancelClick = () => { //доб обработчик нажат
   closePhoto();
 };
 
-const isEscKeydown = (evt) => {//проверка что клавиша ecs
-  if (evt.key === 'Escape') { //если мы нажали escape только в это случае делаем closePhoto
-    closePhoto();
-  }
-};
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const openBigPhoto = (pictureId) => {
   const currentPhoto = photosList.find((photo) => Number(photo.id) === Number(pictureId));
@@ -30,11 +27,12 @@ const openBigPhoto = (pictureId) => {
   bigPictureSection.classList.remove('hidden');
   userModalCanselElement.addEventListener('click', onBigPictureCancelClick); //нижние строки обработчик нажатия по крестику также
   body.classList.add('modal-open'); //доб класс в ()
-  document.addEventListener('keydown', isEscKeydown);
+  document.addEventListener('keydown', isEscapeKey);
 };
 
 //открытие фото
-const openPicture = () => {//событие где функц произойдет тогда когда будет наж на этот элемент или на его дочерний
+const openPicture = () => {
+  //событие где функц произойдет тогда когда будет наж на этот элемент или на его дочерний
   container.addEventListener('click', (evt) => {
     const currentPhoto = evt.target.closest('.picture'); //проверка что точно нажали по picture, либо на эл внутри по отношению к нему
     if (currentPhoto) {
@@ -49,9 +47,9 @@ function closePhoto () {
   bigPictureSection.classList.add('hidden');
   body.classList.remove('modal-open'); //доб класс в ()
   userModalCanselElement.removeEventListener('click', onBigPictureCancelClick);
-  document.removeEventListener('keydown', isEscKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 
   clearComments();//очищаем все лишнее комментарии тд
 }
 
-export { openPicture, isEscKeydown, onBigPictureCancelClick };
+export { openPicture, onBigPictureCancelClick, isEscapeKey };

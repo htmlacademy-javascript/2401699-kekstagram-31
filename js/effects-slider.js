@@ -1,4 +1,4 @@
-const img = document.querySelector('.img-upload__preview');//стили css картинки внутри
+const img = document.querySelector('.img-upload__preview img');//стили css картинки внутри
 const valueEffect = document.querySelector ('.effect-level__value'); //Уровень эффекта записывается в поле  в виде числа.
 const levelEffectUpload = document.querySelector ('.img-upload__effect-level'); //контейнер д/скрытия при выборе оригинала
 const sliderElement = document.querySelector ('.effect-level__slider');
@@ -12,6 +12,9 @@ noUiSlider.create(sliderElement, {
   },
   format: {
     to: function (value) {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
       return value.toFixed(1);
     },
     from: function (value) {
@@ -32,6 +35,7 @@ const onEffectChange = (evt) => {
 
   if (effect === 'none') {
     levelEffectUpload.classList.add('hidden');
+    img.style.filter = 'none';//наложение эффекта на изображение
   } else {
     levelEffectUpload.classList.remove('hidden');
   }
@@ -46,7 +50,7 @@ const onEffectChange = (evt) => {
           min: 0,
           max: 1,
         },
-        start: 100,
+        start: 1,
         step: 0.1,
       });
       sliderElement.noUiSlider.on('update', () => {
@@ -59,7 +63,7 @@ const onEffectChange = (evt) => {
           min: 0,
           max: 1,
         },
-        start: 100,
+        start: 1,
         step: 0.1,
       });
       sliderElement.noUiSlider.on('update', () => {
