@@ -15,6 +15,7 @@ const onBigPictureCancelClick = () => { //доб обработчик нажат
 
 const isEscKeydown = (evt) => {//проверка что клавиша ecs
   if (evt.key === 'Escape') { //если мы нажали escape только в это случае делаем closePhoto
+    evt.preventDefault();
     closePhoto();
   }
 };
