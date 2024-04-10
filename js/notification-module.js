@@ -1,5 +1,6 @@
 //при отклонениях показать мод окна(уведомления )
-import { isEscKeydown } from './modal-photo';
+import { isEscapeKey } from './modal-photo';
+import { onDocumentKeydown } from './upload-form';
 
 const successMessageElement = document.querySelector('#success').content.querySelector('.success');
 const errorMassageElement = document.querySelector('#error').content.querySelector('.error');
@@ -42,80 +43,76 @@ const enableBtn = (text) => {
 };
 
 //Сообщениe успех
-body.appendChild(successMessageElement);
-const messageOfSuccess = body.querySelector('.success');
-messageOfSuccess.classList.add('hidden');
-const successInner = messageOfSuccess.querySelector('.success__inner');
-const successBtn = successInner.querySelector('.success__button');
-
-//Сообщениe ошибка
-body.appendChild(errorMassageElement);
-const messageOfError = body.querySelector('.error');
-messageOfError.classList.add('hidden');
-const errorInner = messageOfError.querySelector('.error__inner');
-const errorBtn = errorInner.querySelector('.error__button');
-
-const closeSuccessfulByClick = function (evt) {
-  if (messageOfSuccess === evt.target) {
-    messageOfSuccess.classList.add('hidden');
+const closeOutsideModalSuccess = function (clickEvt) {
+  const messageOfSuccess = body.querySelector('.success');
+  const successInner = messageOfSuccess.querySelector('.success__inner');
+  const withinBoundariesSuccess = clickEvt.composedPath().includes(successInner);
+  if (!withinBoundariesSuccess) {
     removeSuccessListeners();
   }
 };
 
-const closeErrorByClick = function (evt) {
-  if (messageOfError === evt.target) {
-    messageOfError.classList.add('hidden');
+//Сообщениe ошибка
+const closeOutsideModalError = function (clickEvt) {
+  const messageOfError = body.querySelector('.error');
+  const errorInner = messageOfError.querySelector('.error__inner');
+  const withinBoundariesError = clickEvt.composedPath().includes(errorInner);
+  if (!withinBoundariesError) {
     removeErrorListeners();
   }
 };
 
 const closeSuccessfulByKeydown = function (keydownEvt) {
-  if (isEscKeydown(keydownEvt)) {
-    messageOfSuccess.classList.add('hidden');
+  if (isEscapeKey(keydownEvt)) {
     removeSuccessListeners();
   }
 };
 
 const closeErrorByKeydown = function (keydownEvt) {
-  if (isEscKeydown(keydownEvt)) {
-    messageOfError.classList.add('hidden');
+  if (isEscapeKey(keydownEvt)) {
+    keydownEvt.preventDefault();
     removeErrorListeners();
   }
 };
 
-const bySuccessBtn = () => {
-  messageOfSuccess.classList.add('hidden');
+const bySuccessButton = () => {
   removeSuccessListeners();
 };
 
-const byErrorBtn = () => {
-  messageOfError.classList.add('hidden');
+const byErrorButton = () => {
   removeErrorListeners();
 };
 
-const handleSuccessMessage = function () {
-  document.addEventListener('click', closeSuccessfulByClick);
-  document.addEventListener('keydown', closeSuccessfulByKeydown);
-  successBtn.addEventListener('click', bySuccessBtn);
+const handleErrorMessage = function () {
+  body.appendChild(errorMassageElement);
+  const errorButton = body.querySelector('.error__button');
+  document.addEventListener('click', closeOutsideModalError);
+  document.addEventListener('keydown', closeErrorByKeydown);
+  errorButton.addEventListener('click', byErrorButton);
+  document.removeEventListener('keydown', onDocumentKeydown);
 };
 
 function removeSuccessListeners () {
-  document.removeEventListener('click', closeSuccessfulByClick);
+  document.removeEventListener('click', closeOutsideModalSuccess);
   document.removeEventListener('keydown', closeSuccessfulByKeydown);
-  successBtn.removeEventListener('click', bySuccessBtn);
+  const successMessage = body.querySelector('.success');
+  successMessage.parentNode.removeChild(successMessage);
 }
 
-const handleErrorMessage = function () {
-  document.addEventListener('click', closeErrorByClick);
-  document.addEventListener('keydown', closeErrorByKeydown);
-  errorBtn.addEventListener('click', byErrorBtn);
+const handleSuccessMessage = function () {
+  body.appendChild(successMessageElement);
+  const successButton = body.querySelector('.success__button');
+  document.addEventListener('click', closeOutsideModalSuccess);
+  document.addEventListener('keydown', closeSuccessfulByKeydown);
+  successButton.addEventListener('click', bySuccessButton);
 };
 
 function removeErrorListeners () {
-  document.removeEventListener('click', closeErrorByClick);
+  document.removeEventListener('click', closeOutsideModalError);
   document.removeEventListener('keydown', closeErrorByKeydown);
-  errorBtn.removeEventListener('click', byErrorBtn);
+  document.addEventListener('keydown', onDocumentKeydown);
+  const errorMessage = body.querySelector('.error');
+  errorMessage.parentNode.removeChild(errorMessage);
 }
 
-export {showErrorMessage, disabledBtn, enableBtn, submitBtnText, handleSuccessMessage, handleErrorMessage,
-  messageOfSuccess, messageOfError};
+export { showErrorMessage, submitBtnText, disabledBtn, enableBtn, handleErrorMessage, handleSuccessMessage };
