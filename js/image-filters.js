@@ -7,7 +7,7 @@ const FILTER = {
   DISCUSSED: 'filter-discussed',
 };
 
-const SORTFUNCTION = {
+const SORT_FUNCTION = {
   RANDOM: () => 0.5 - Math.random(),
   DISCUSSED: (a, b) => b.comments.length - a.comments.length,
 };
@@ -40,10 +40,10 @@ function applyFilter() {
     filteredPictures = pictures;//исходная картинка
   }
   if (defaultFilter === FILTER.RANDOM) {
-    filteredPictures = pictures.toSorted(SORTFUNCTION.random).slice(0, MAX_PICTURE_COUNT);
+    filteredPictures = pictures.toSorted(SORT_FUNCTION.RANDOM).slice(0, MAX_PICTURE_COUNT);
   }
   if (defaultFilter === FILTER.DISCUSSED) {
-    filteredPictures = pictures.toSorted(SORTFUNCTION.discussed);//по убыванию кол-ва комментариев
+    filteredPictures = pictures.toSorted(SORT_FUNCTION.DISCUSSED);//по убыванию кол-ва комментариев
   }
   debounceRender(filteredPictures);//вызов с задержкой отрисованных фото
 }

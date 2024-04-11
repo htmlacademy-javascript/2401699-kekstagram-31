@@ -1,5 +1,6 @@
 import { photosList } from './thumbnails.js';
 import { clearComments, renderComments } from './render-comments.js';
+import { isEscapeKey } from './util.js';
 import { onDocumentKeydown } from './upload-form.js';
 
 const body = document.querySelector('body');
@@ -14,15 +15,6 @@ const onBigPictureCancelClick = () => { //доб обработчик нажат
   closePhoto();
 };
 
-<<< master
-const isEscKeydown = (evt) => {//проверка что клавиша ecs
-  if (evt.key === 'Escape') { //если мы нажали escape только в это случае делаем closePhoto
-    evt.preventDefault();
-    closePhoto();
-  }
-};
-=======
-
 const openBigPhoto = (pictureId) => {
   const currentPhoto = photosList.find((photo) => Number(photo.id) === Number(pictureId));
   bigPictureImg.src = currentPhoto.url; //ниже что куда всавляется(куда лайки/комментарии и т.д)
@@ -34,7 +26,7 @@ const openBigPhoto = (pictureId) => {
   bigPictureSection.classList.remove('hidden');
   userModalCanselElement.addEventListener('click', onBigPictureCancelClick); //нижние строки обработчик нажатия по крестику также
   body.classList.add('modal-open'); //доб класс в ()
-  document.addEventListener('keydown', isEscapeKey);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 //открытие фото
