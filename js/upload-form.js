@@ -1,5 +1,5 @@
 import { isEscapeKey } from './modal-photo.js';
-import { isHashtagValid, error } from './valid-hashtag.js';
+import { isHashtagValid, getTextErrorMessage } from './valid-hashtag.js';
 import { onEffectChange } from './effects-slider.js';
 import { sendData } from './api.js';
 import { submitBtnText, disabledBtn, enableBtn, handleSuccessMessage, handleErrorMessage } from './notification-module.js';
@@ -126,13 +126,13 @@ const sendFormData = (onSuccess) => {//передаём ('событие', фу�
   });
 };
 
-const formSubmitHandler = (evt) => {
+const onFormSubmit = (evt) => {
   evt.preventDefault();
   sendFormData(evt.target);
 };
 
-pristine.addValidator(hashtagInput, isHashtagValid, error);
+pristine.addValidator(hashtagInput, isHashtagValid, getTextErrorMessage);
 imgUploadEffects.addEventListener('change', onEffectChange);
-uploadForm.addEventListener('submit', formSubmitHandler);
+uploadForm.addEventListener('submit', onFormSubmit);
 
 export { sendFormData, closePhotoEditor, onFileInputChange, onDocumentKeydown, initUploadModal };

@@ -3,7 +3,7 @@ const MAX_NUMBER_SYMBOL = 20;
 
 let textErrorMessage = '';
 
-const error = () => textErrorMessage; //ф вернет textError
+const getTextErrorMessage = () => textErrorMessage; //ф вернет textError
 
 const isHashtagValid = (value) => {
   textErrorMessage = ''; //обнуляем предыдушие ошибки
@@ -58,4 +58,4 @@ const isHashtagValid = (value) => {
   });
 };
 
-export { isHashtagValid, error };
+export { isHashtagValid, getTextErrorMessage };
