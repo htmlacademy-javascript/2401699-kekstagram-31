@@ -1,7 +1,6 @@
 import { photosList } from './thumbnails.js';
 import { clearComments, renderComments } from './render-comments.js';
 import { isEscapeKey } from './util.js';
-import { onDocumentKeydown } from './upload-form.js';
 
 const body = document.querySelector('body');
 const container = document.querySelector('.pictures');
@@ -13,6 +12,13 @@ const userModalCanselElement = bigPictureSection.querySelector('.big-picture__ca
 
 const onBigPictureCancelClick = () => { //доб обработчик нажатия на фото
   closePhoto();
+};
+
+const onDocumentKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closePhoto();
+  }
 };
 
 const openBigPhoto = (pictureId) => {
